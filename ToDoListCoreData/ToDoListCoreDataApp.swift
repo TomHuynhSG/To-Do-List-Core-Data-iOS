@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
+
 
 @main
 struct ToDoListCoreDataApp: App {
-    let dataController = DataController.shared
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, dataController.container.viewContext)
+                .modelContainer(for: [Task.self])  // Add the SwiftData container for Task model
         }
     }
 }
+

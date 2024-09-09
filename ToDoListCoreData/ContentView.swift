@@ -5,12 +5,12 @@
 //  Created by Tom Huynh on 09/09/2023.
 //
 
-import SwiftUI
 
+import SwiftUI
+import SwiftData
 struct ContentView: View {
-    @Environment(\.managedObjectContext) var moc  // Access Core Data context
-    
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.name)]) var tasks: FetchedResults<Task>  // Fetch tasks sorted by name
+    @Environment(\.modelContext) var modelContext
+    @Query(sort: \Task.name) var tasks: [Task]  // SwiftData @Query for fetching tasks sorted by name
     
     @State private var newTaskName: String = ""
     
@@ -25,15 +25,14 @@ struct ContentView: View {
                 }
                 
                 Section(header: Text("Tasks")) {
-                    ForEach(tasks, id: \.self) { task in
+                    ForEach(tasks) { task in  // No need for id: \.self
                         HStack {
-                            Text(task.name ?? "")
+                            Text(task.name)
                             Spacer()
                             Toggle("", isOn: Binding(
                                 get: { task.completed },  // Get completion status
                                 set: { newValue in  // Update status and save
                                     task.completed = newValue
-                                    try? moc.save()
                                 }
                             ))
                         }
@@ -48,21 +47,25 @@ struct ContentView: View {
     }
     
     private func addTask() {
-        let newTask = Task(context: moc)
-        newTask.name = newTaskName
-        newTask.completed = false
-        try? moc.save()
+        let newTask = Task(name: newTaskName, completed: false)
+        modelContext.insert(newTask) // Insert into the context
         newTaskName = ""  // Clear input field after saving
     }
     
     private func deleteTasks(offsets: IndexSet) {
-        offsets.map { tasks[$0] }.forEach(moc.delete)
-        try? moc.save()
+        for index in offsets {
+            let task = tasks[index]
+            if let taskIndex = tasks.firstIndex(of: task) {
+                modelContext.delete(task)
+            }
+        }
     }
+    
 }
-
 #Preview {
     ContentView()
-        .environment(\.managedObjectContext, DataController.shared.container.viewContext)
+        .modelContainer(for: [Task.self])  // Preview with SwiftData container
 }
+
+
 
