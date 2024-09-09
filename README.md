@@ -12,6 +12,12 @@ An example of using Core Data model in SwiftUI iOS project!
   - Add new tasks.
   - Toggle task completion status.
   - Delete existing tasks by swipping left on it or pressing Edit button.
+ 
+<p align="center">
+  <img src="https://i.imgur.com/zvo7tzj.png" height="600" > 
+  <img src="https://i.imgur.com/gaHZcYW.png" height="600" > 
+</p>
+
 
 ## 🔧 Build Information
 - Xcode 14.3.1
