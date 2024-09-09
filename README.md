@@ -15,7 +15,7 @@ An example of using Core Data model in SwiftUI iOS project!
 
 
  <p align="center">
-  <img src="https://i.imgur.com/zvo7tzj.png" height="600" > 
+  <img src="https://i.imgur.com/cjZIW1C.png" height="600" > 
   <img src="https://i.imgur.com/gaHZcYW.png" height="600" > 
 </p>
 
